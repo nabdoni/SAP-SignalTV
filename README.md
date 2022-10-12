@@ -1,5 +1,5 @@
 # SAP-SignalTV
-An automated YouTube Playlist player targeted at younger children
+An automated YouTube Playlist player targeted at younger children, built with React 18
 
 ## Install dependencies
 You need to install the latest version of NodeJS, it will have npm installed by default.
