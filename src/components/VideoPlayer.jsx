@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react"
+import React, { useState, useRef } from "react"
 import YouTube from "@u-wave/react-youtube"
 
 import VolumeControls from './VolumeControls'
@@ -14,9 +14,8 @@ import PlaylistSelect from './PlaylistSelect'
 const VideoPlayer = (props) => {
 
     const [volume, setVolume] = useState(0)
-    const [playlist, setPLaylist] = useState(playlistData.nature)
+    const [playlist, setPLaylist] = useState(playlistData.documentary)
     const [muted, setMuted] = useState(false) //set to true for default mute
-    const [numberpaused, setNumberpaused] = useState(0)
     const vidRef = useRef()
 
     const onPlayerReady = (event) => {
@@ -25,9 +24,8 @@ const VideoPlayer = (props) => {
             listType: 'playlist',
             list: playlist
         })
-        console.log(player.getPlaylist());
     }
-    
+
     const onPlayerError = (event) => {
         console.log(`Personalized error handler`, event)
     }
@@ -38,58 +36,59 @@ const VideoPlayer = (props) => {
 
     const handleMute = (e) => {
         e.preventDefault()
-        !muted ? setMuted(true) : setMuted(false)
-
-    }
-    
-      // this is so weird...the code breaks if the function below isn't used....gets choppy but it works!
-    const onPlayerPause = (event) => {
-        const player = event.target
-        if(numberpaused === 0) {
-            player.loadPlaylist({
-                listType: 'playlist',
-                list: playlist,
-                index: Math.floor(Math.random() * 50)
-            })
-            setNumberpaused(numberpaused + 1)
+        if(!muted) {
+          setMuted(true)
+        } else {
+          setMuted(false)
         }
     }
 
     //to do, test a pre-page with info given through it
     const handleNature = (e) => {
         e.preventDefault()
-            setPLaylist(playlistData.nature)
-        console.log(vidRef.current.props.list)
-        setNumberpaused(0)
+            setPLaylist("")
+            setTimeout(() => {
+              setPLaylist(playlistData.nature)
+            }, 200);
       }
+
       const handleScience = (e) => {
         e.preventDefault()
-        setPLaylist(playlistData.science)
-        console.log(vidRef.current.props.list)
-        setNumberpaused(0)
+        setPLaylist("")
+        setTimeout(() => {
+          setPLaylist(playlistData.science)
+        }, 200);
       }
+
       const handleHistory = (e) => {
         e.preventDefault()
-        setPLaylist(playlistData.history)
-        console.log(vidRef.current.props.list)
-        setNumberpaused(0)
+        setPLaylist("")
+        setTimeout(() => {
+          setPLaylist(playlistData.history)
+        }, 200);
       }
+
       const handleDocumentary = (e) => {
         e.preventDefault()
-        setPLaylist(playlistData.documentary)
-        console.log(vidRef.current.props.list)
-        setNumberpaused(0)
+        setPLaylist("")
+        setTimeout(() => {
+          setPLaylist(playlistData.documentary)
+        }, 200);
       }
+
       const handleMusic = (e) => {
         e.preventDefault()
-        setPLaylist(playlistData.music)
-        console.log(vidRef.current.props.list)
-        setNumberpaused(0)
+        setPLaylist("")
+        setTimeout(() => {
+          setPLaylist(playlistData.music)
+        }, 200);
       }
 
     return (
         <>
-        <YouTube list={playlist} listType="playlist" ref={vidRef} width="853" height="480" id="player" autoplay={props.autoplay} controls={props.controls} modestBranding={props.modestbranding} showRelatedVideos={props.rel} muted={muted} onReady={onPlayerReady} volume={volume} onError={onPlayerError} onPause={onPlayerPause} />
+        <div className="video-responsive">
+        <YouTube list={playlist} listType="playlist" ref={vidRef} width="853" height="480" autoplay={props.autoplay} controls={props.controls} modestBranding={props.modestbranding} showRelatedVideos={props.rel} muted={muted} onReady={onPlayerReady} volume={volume} onError={onPlayerError} />
+        </div>
         <VolumeControls type="range" min={0} max={1} step={0.01} value={volume} onChangeHandler={handleVolume} muteClick={handleMute} ifMuted={muted}/>
         <PlaylistSelect natureOnClick={handleNature} scienceOnClick={handleScience} historyOnClick={handleHistory} documentaryOnClick={handleDocumentary} musicOnClick={handleMusic} />
         </>
