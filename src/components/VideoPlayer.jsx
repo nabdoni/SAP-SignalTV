@@ -16,6 +16,8 @@ const VideoPlayer = (props) => {
     const [volume, setVolume] = useState(0)
     const [playlist, setPLaylist] = useState(playlistData.documentary)
     const [muted, setMuted] = useState(false) //set to true for default mute
+    const [player, setPlayer] = useState({ playa: null})
+    const [pause, setPause] = useState("Playing")
     const vidRef = useRef()
 
     const onPlayerReady = (event) => {
@@ -24,6 +26,7 @@ const VideoPlayer = (props) => {
             listType: 'playlist',
             list: playlist
         })
+        setPlayer({playa: player})
     }
 
     const onPlayerError = (event) => {
@@ -41,6 +44,16 @@ const VideoPlayer = (props) => {
         } else {
           setMuted(false)
         }
+    }
+    const handlePause = (e) => {
+      e.preventDefault()
+      if(pause === "Playing") {
+        setPause("Paused")
+        player.playa.pauseVideo()
+      } else {
+        setPause("Playing")
+        player.playa.playVideo()
+      }
     }
 
     //to do, test a pre-page with info given through it
@@ -90,6 +103,10 @@ const VideoPlayer = (props) => {
         <YouTube list={playlist} listType="playlist" ref={vidRef} width="853" height="480" autoplay={props.autoplay} controls={props.controls} modestBranding={props.modestbranding} showRelatedVideos={props.rel} muted={muted} onReady={onPlayerReady} volume={volume} onError={onPlayerError} />
         </div>
         <VolumeControls type="range" min={0} max={1} step={0.01} value={volume} onChangeHandler={handleVolume} muteClick={handleMute} ifMuted={muted}/>
+        <button onClick={handlePause}>{pause}</button>
+        <span> </span>
+        <button onClick={() => player.playa.previousVideo()}>Previous</button>
+        <button onClick={() => player.playa.nextVideo()}>Next</button>
         <PlaylistSelect natureOnClick={handleNature} scienceOnClick={handleScience} historyOnClick={handleHistory} documentaryOnClick={handleDocumentary} musicOnClick={handleMusic} />
         </>
     )
